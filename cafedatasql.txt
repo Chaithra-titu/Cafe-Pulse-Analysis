@@ -1,0 +1,142 @@
+                                                                                                             ☕ CafePulse: Transaction & Revenue Insights
+
+                                                                                                                              SQL Analysis Documentation
+
+ 🟢
+
+ 1. Count total number of transactions
+SELECT COUNT(TRANSACTION_ID) AS total_transactions
+FROM CAFE_DATA;
+
+ 2. Find total revenue generated
+SELECT SUM(QUANTITY * PRICE_PER_UNIT) AS revenue
+FROM CAFE_DATA;
+ 
+3. List all unique items sold
+SELECT DISTINCT ITEM
+FROM CAFE_DATA;
+ 
+4. Find all unique payment modes
+SELECT DISTINCT PAYMENT_MODE
+FROM CAFE_DATA;
+ 
+5. Get the average transaction value
+SELECT AVG(TOTAL_SPENT) AS avg_transaction_value
+FROM CAFE_DATA;
+
+6. Find total revenue for each item
+SELECT ITEM, SUM(TOTAL_SPENT) AS revenue
+FROM CAFE_DATA
+GROUP BY ITEM;
+
+7. Find total quantity sold per item
+SELECT ITEM, SUM(QUANTITY) AS total_quantity
+FROM CAFE_DATA
+GROUP BY ITEM;
+
+ 8. Identify the top-selling item (by quantity)
+SELECT ITEM, SUM(QUANTITY) AS top_selling
+FROM CAFE_DATA
+GROUP BY ITEM
+ORDER BY top_selling DESC
+LIMIT 1;
+
+9.Identify the highest revenue-generating item
+SELECT ITEM, SUM(TOTAL_SPENT) AS peak_selling_item
+FROM CAFE_DATA
+GROUP BY ITEM
+ORDER BY peak_selling_item DESC
+LIMIT 1;
+
+ 10. Calculate total revenue by payment mode
+SELECT PAYMENT_MODE, SUM(TOTAL_SPENT) AS revenue
+FROM CAFE_DATA
+GROUP BY PAYMENT_MODE;
+
+11. Calculate total revenue by location
+SELECT LOCATION, SUM(TOTAL_SPENT) AS revenue
+FROM CAFE_DATA
+GROUP BY LOCATION;
+
+ 12. Find number of transactions per location
+SELECT LOCATION, COUNT(*) AS total_transactions
+FROM CAFE_DATA
+GROUP BY LOCATION;
+ 
+13. Find total revenue per month
+SELECT MONTH(TRANSACTION_DATE) AS month,
+       SUM(TOTAL_SPENT) AS revenue
+FROM CAFE_DATA
+GROUP BY MONTH(TRANSACTION_DATE)
+ORDER BY month;
+
+14. Count transactions per month
+SELECT MONTH(TRANSACTION_DATE) AS month,
+       COUNT(*) AS transactions
+FROM CAFE_DATA
+GROUP BY MONTH(TRANSACTION_DATE);
+
+
+15. Identify the month with highest revenue
+SELECT MONTH(TRANSACTION_DATE) AS month,
+       SUM(TOTAL_SPENT) AS highest_revenue
+FROM CAFE_DATA
+GROUP BY MONTH(TRANSACTION_DATE)
+ORDER BY highest_revenue DESC
+LIMIT 1;
+
+16. Find daily total revenue
+SELECT TRANSACTION_DATE,
+       SUM(TOTAL_SPENT) AS daily_revenue
+FROM CAFE_DATA
+GROUP BY TRANSACTION_DATE;
+
+17. Identify the date with highest sales
+SELECT TRANSACTION_DATE,
+       SUM(TOTAL_SPENT) AS peak_revenue
+FROM CAFE_DATA
+GROUP BY TRANSACTION_DATE
+ORDER BY peak_revenue DESC
+LIMIT 1;
+
+
+18. Find transactions with value greater than average
+SELECT TOTAL_SPENT
+FROM CAFE_DATA
+WHERE TOTAL_SPENT > (
+    SELECT AVG(TOTAL_SPENT) FROM CAFE_DATA
+);
+
+
+ 19. Rank items by total revenue
+SELECT ITEM,
+       SUM(TOTAL_SPENT) AS total_revenue,
+       RANK() OVER (ORDER BY SUM(TOTAL_SPENT) DESC) AS rank_position
+FROM CAFE_DATA
+GROUP BY ITEM;
+
+
+20. Find top 3 highest value transactions
+SELECT *
+FROM CAFE_DATA
+ORDER BY TOTAL_SPENT DESC
+LIMIT 3;
+
+
+ 21. Calculate percentage contribution of each item
+SELECT ITEM,
+       SUM(TOTAL_SPENT) * 100.0 / (
+           SELECT SUM(TOTAL_SPENT) FROM CAFE_DATA
+       ) AS percentage_contribution
+FROM CAFE_DATA
+GROUP BY ITEM;
+
+
+22. Find most popular payment mode
+SELECT PAYMENT_MODE,
+       COUNT(*) AS usage_count
+FROM CAFE_DATA
+GROUP BY PAYMENT_MODE
+ORDER BY usage_count DESC
+LIMIT 1;
+
